@@ -1,21 +1,21 @@
 {
-  "name": "angular-material2-vertical-tabs",
+  "name": "query-composer",
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "rxjs": "6.1.0",
-    "core-js": "2.5.5",
-    "zone.js": "0.8.26",
-    "@angular/cdk": "6.3.1",
+    "@angular/animations": "^6.0.3",
+    "@angular/cdk": "^6.3.1",
+    "@angular/common": "6.0.3",
+    "@angular/compiler": "6.0.3",
     "@angular/core": "6.0.3",
     "@angular/forms": "6.0.3",
-    "@angular/common": "6.0.3",
-    "@angular/router": "6.0.3",
-    "@angular/compiler": "6.0.3",
-    "@angular/material": "6.2.1",
-    "@angular/animations": "6.0.3",
+    "@angular/material": "^6.2.1",
     "@angular/platform-browser": "6.0.3",
-    "@angular/platform-browser-dynamic": "6.0.3"
+    "@angular/platform-browser-dynamic": "6.0.3",
+    "@angular/router": "6.0.3",
+    "core-js": "2.5.5",
+    "rxjs": "6.1.0",
+    "zone.js": "0.8.26"
   },
   "scripts": {
     "ng": "ng",
@@ -45,5 +45,17 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.1.1"
-  }
+  },
+  "description": "[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/angular-material2-vertical-tabs-qyt2rm)",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Savers80/queryComposer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Savers80/queryComposer/issues"
+  },
+  "homepage": "https://github.com/Savers80/queryComposer#readme"
 }

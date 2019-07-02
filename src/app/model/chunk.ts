@@ -1,6 +1,6 @@
 
 export class Chunk {
-  public alias:String;
-  public descrizione:String;
-  public query:String;
+  alias:String;
+  descrizione:String;
+  query:String;
 }

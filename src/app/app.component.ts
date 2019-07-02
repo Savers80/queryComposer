@@ -9,11 +9,11 @@ import { Chunk} from './model/chunk';
 })
 export class AppComponent  implements OnInit , OnChanges {
   name = 'Angular 6';
-  alias ='';
 
-  chunks_list:Chunk[] = [];
+  chunks_list:Chunk[] ;
 
   ngOnInit() {
+    this.chunks_list = [];
     let chunk:Chunk = new Chunk();
     chunk.alias = "alias onInit ";
     chunk.descrizione = 'descrizione onInit';
@@ -23,8 +23,6 @@ export class AppComponent  implements OnInit , OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     //alert("ciao");
   }
-  getNearText(event){
-    alert(JSON.stringify(event));
-  }
+
 
 }
