@@ -1,17 +1,44 @@
-<div class="container">
-  <div id="content">
-    <div id="main-content">
-      <mat-tab-group fxLayout='column' >  
-          <mat-tab *ngFor="let chunk of chunks_list" >
-            <ng-template mat-tab-label >
-                <div>
-                  <B>{{chunk.alias}}</B>
-                  <div>{{chunk.descrizione}}</div>
-                </div>
-            </ng-template>
-            <app-query-chunk [chunk]="chunk"></app-query-chunk>
-          </mat-tab>
-      </mat-tab-group>
-    </div>
-  </div>
-</div>
+<mat-sidenav-container>
+  <mat-sidenav position="end" mode="side" [opened]="true" [fixedInViewport]="true">  
+    <mat-toolbar>
+      <mat-list>
+        <mat-list-item>
+          <button>
+            <mat-icon>extension</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-list-item>
+            <button>
+                <mat-icon>playlist_play</mat-icon>
+              </button>
+            </mat-list-item>
+            <mat-list-item>
+              <button (click)="addChunk();">
+                <mat-icon>playlist_add</mat-icon>
+              </button>  
+              
+        </mat-list-item>
+      </mat-list>
+      
+    </mat-toolbar>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content >
+    <mat-tab-group>
+      <mat-tab *ngFor="let chunk of chunks_list" >
+        <ng-template mat-tab-label >
+          <div>
+            <B>{{chunk.alias}}</B>
+            <div>{{chunk.descrizione.substr(0,10)}}</div>
+          </div>
+        </ng-template>
+        <app-query-chunk [chunk]="chunk"></app-query-chunk>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-sidenav-content>
+
+  
+
+</mat-sidenav-container>
+

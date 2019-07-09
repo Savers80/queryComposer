@@ -1,28 +1,50 @@
-            <div fxLayout="column">
-              <form fxLayout="column" fxFlex="100">
+          <div >
+              <form >
                   <mat-form-field fxFlex>
-                    <input matInput #alias placeholder="Table" name="alias" [(ngModel)]="chunk.alias"  readonly="true" />
+                    <input matInput #alias placeholder="Table" name="alias" [(ngModel)]="chunk.alias"  [readonly]="alias_readonly" />
                   </mat-form-field>
-                  <mat-icon>edit</mat-icon>
+                  <button (click)="alias_readonly=!alias_readonly;">
+
+                    <mat-icon >edit</mat-icon>
+                  </button>
                   <!-- <br>
                   {{chunk.alias}} -->
                   <br>
                   <mat-form-field>
-                    <input matInput #descrizione placeholder="Descrizione" name="descrizione" [(ngModel)]="chunk.descrizione" (keyup)="0"/>
+                    <input matInput #descrizione placeholder="Descrizione" name="descrizione" [(ngModel)]="chunk.descrizione" [readonly]="descrizione_readonly" />
                   </mat-form-field>
-                  <mat-icon>edit</mat-icon>
+                  <button (click)="descrizione_readonly=!descrizione_readonly;">
+                    <mat-icon>edit</mat-icon>
+                  </button>
                   <br>
-                  <div id="mytxt" #el contenteditable="true" (click)='getNearText($event);'>
-                    <b>SELECT</b> *
-                    <b>FROM</b> TableRef
-                  </div>
 
-                  <textarea #chunkRaw type="text"style="width:100%; height:100%" class="chunk"  >
-        SELECT *
-        FROM TableRef
-                  </textarea>
+                  <pre style="white-space: pre-wrap;" class="sql" (keydown)="keyHandler($event);" >
+                      <code class="sql" contenteditable="true" >
+                        SELECT * FROM asfjkshjkf
+                      </code>
+                  </pre>
+
+                  <div id="mytxt" #el  contenteditable="true" (click)='getNearText($event);'  style="white-space: pre-wrap;"  class="sql">
+                      {{chunk.query}}
+                      SELECT *FROM TableRef 
+                  </div>
+                  
                 <fieldset style="white-space: pre-wrap;">
                   {{createChunk()}}
                 </fieldset>
               </form>
+              <mat-toolbar>
+                  <mat-toolbar-row>
+                    <button>
+                      <mat-icon>extension</mat-icon>
+                    </button>
+                    <button>
+                      <mat-icon>playlist_play</mat-icon>
+                     </button>
+                     
+                     <button>
+                        <mat-icon>playlist_add</mat-icon>
+                       </button>
+                  </mat-toolbar-row>
+                </mat-toolbar>
             </div>
