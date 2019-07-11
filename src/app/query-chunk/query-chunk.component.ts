@@ -122,10 +122,23 @@ createChunk(){
    keyHandler(e:KeyboardEvent) {
     var tabkey = 9;
     let element:HTMLInputElement = <HTMLInputElement> e.target;
-    
+
+    let range = window.getSelection().getRangeAt(0);
+    console.log(range);
+    let index = 0;
+    let char_position = range.endOffset;
+    let container = range.endContainer.parentNode.nodeName=='SPAN'? range.endContainer.parentNode.previousSibling: range.endContainer.previousSibling;
+    while(container != null && index <20 ){
+      console.log("char_position: " +char_position);
+      index++;
+      char_position += container.textContent.length;
+      container = container.previousSibling;
+    }
+    console.log("char_position: " +char_position);
+
+
     if (e.ctrlKey == true) {
       if (e.keyCode == 32) {
-        this.getPosition(element);
       }
     }else {
       if (e.keyCode == tabkey) {
@@ -135,12 +148,34 @@ createChunk(){
         }
         else{
         // element. (element.children());
-        // element.r innerHTML =  hljs.highlightAuto( element.textContent).value;
+         element.innerHTML =  hljs.highlightAuto( element.textContent).value;
         }
         console.log(e);
         console.log(element);
-        element.setSelectionRange(element.innerHTML.length,element.innerHTML.length, 'forward') ;
     }
- 
+console.log("repositioning");
+
+    let current_el:Node = element.firstChild;
+    do{
+      console.log(current_el);
+      if (current_el){
+        if ( current_el.textContent.length < char_position ){
+          char_position -= current_el.textContent.length;
+          }
+
+              current_el = current_el.nextSibling==null? current_el : current_el.nextSibling ;
+             
+        
+      } 
+    }while( current_el!=null && current_el.textContent.length < char_position);
+    current_el = current_el.nodeName=='SPAN' ? current_el.firstChild : current_el;
+      if (current_el==null){
+        char_position=0;  
+      }
+    
+    console.log("current_el:");
+    console.log(current_el);
+    console.log(char_position);
+    window.getSelection().setPosition(current_el, char_position);
   }
 }
