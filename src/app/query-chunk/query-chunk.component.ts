@@ -6,6 +6,8 @@ import hljs from "highlight.js";
 
 import { Chunk } from '../model/chunk';
 import { v } from '@angular/core/src/render3';
+import { RestApiService } from '../shared/rest-api.service';
+import { MatSort, MatTableDataSource } from '@angular/material';
 @Component({
   selector: 'app-query-chunk',
   templateUrl: './query-chunk.component.html',
@@ -21,12 +23,21 @@ export class QueryChunkComponent implements OnInit, OnChanges {
   @ViewChild('alias') aliasRef: ElementRef;
   alias_readonly:boolean = true;
   @ViewChild('chunkRaw') chunkRawRef: ElementRef;
+  displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
 
-  constructor() { }
+  columnsToDisplay: string[] = this.displayedColumns.slice();
+  data  = QueryChunkComponent.ELEMENT_DATA;
+  datasource = new MatTableDataSource();
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(public restApi: RestApiService ) { }
 
   ngOnInit() {
    // alert(JSON.stringify(this.chunk));
    hljs.initHighlightingOnLoad();
+    this.datasource.sort = this.sort;
+    this.datasource.data = QueryChunkComponent.ELEMENT_DATA;
+    this.datasource.filterPredicate = this.createFilter();
   }
 
    ngOnChanges(changes: SimpleChanges) {
@@ -178,4 +189,78 @@ console.log("repositioning");
     console.log(char_position);
     window.getSelection().setPosition(current_el, char_position);
   }
+
+  listAllColumnsQuery(dataEmployee) {
+    this.restApi.listAllColumnsQuery().subscribe((data: []) => {
+      this.columnsToDisplay = data['columns_name'];
+      this.displayedColumns = data['columns_name']; 
+      this.data=[];
+      data['rows'].forEach(element => {
+        this.data.push(
+          this.columnsToDisplay.reduce(function(acc, cur, i) {
+            acc[ cur ] = element[i];
+            return acc;
+          }, {}) 
+        )
+      });
+
+      console.log(this.data);
+    })
+    }
+
+    executeQuery(dataEmployee) {
+      this.restApi.executeQuery(this.el.nativeElement.textContent).subscribe((data: []) => {
+        this.columnsToDisplay = data['columns_name'];
+        this.displayedColumns = data['columns_name']; 
+        this.data=[];
+        data['rows'].forEach(element => {
+          this.data.push(
+            this.columnsToDisplay.reduce(function(acc, cur, i) {
+              acc[ cur ] = element[i];
+              return acc;
+            }, {}) 
+          )
+        });
+  
+        console.log(this.data);
+      })
+
+      this.datasource.data = this.data;
+      }
+
+      applyFilter(filterValue: string) {
+        this.datasource.filter = filterValue.trim().toLowerCase();
+      }
+
+  public static ELEMENT_DATA: any[] = [
+    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  ];
+
+
+  public createFilter(): (data: any, filter: any) => boolean {
+    const filterFunction = function(data, filter): boolean {
+      const searchData = JSON.parse(filter);
+      let status = false;
+      for (const key in searchData) {
+        if (data[key].indexOf(searchData[key]) !== -1) {
+          status = true;
+        } else {
+          status = false;
+          break;
+        }
+      }
+      return status;
+    };
+    return filterFunction;
+  }
+
 }
