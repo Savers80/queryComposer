@@ -29,9 +29,7 @@
                       SELECT *FROM TableRef 
                   </div>
                   
-                <fieldset style="white-space: pre-wrap;">
-                  {{createChunk()}}
-                </fieldset>
+
               </form>
               <mat-toolbar>
                   <mat-toolbar-row>
@@ -47,7 +45,7 @@
                        </button>
                   </mat-toolbar-row>
                 </mat-toolbar>
-                <input type="file" (change)="onFileChange($event);">
+
             </div>
 
             <table mat-table [dataSource]="datasource" matSort  class="mat-elevation-z8">

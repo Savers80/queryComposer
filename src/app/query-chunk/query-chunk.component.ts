@@ -1,7 +1,7 @@
 import { ViewChild, ElementRef, ViewRef, ViewContainerRef  } from '@angular/core';
 import { Component, OnInit, Input } from '@angular/core';
 import {  OnChanges, SimpleChanges} from '@angular/core';
-import hljs from "highlight.js";
+import hljs from 'highlight.js';
 import { saveAs } from 'file-saver';
 
 import { Chunk } from '../model/chunk';
@@ -43,41 +43,6 @@ export class QueryChunkComponent implements OnInit, OnChanges {
     // alert("ciao");
    }
 
-createChunk(){
-    let newline = "\n"; //String.fromCharCode(13, 10);
-    let out:string = newline;
-    let descr_chunks:string[] = this.descrizioneRef.nativeElement.value.split(" ")
-    let max_column :number = 80;
-    let index_column:number=0;
-    let out_descr:string="";
-    descr_chunks.forEach(element => {
-      if (index_column ==0){
-        out_descr +=  newline+ '--#DSCR# ';
-        index_column += '--#DSCR# '.length;
-      }else if (index_column< max_column){
-        out_descr += element + " ";
-        index_column += element.length +1;
-      }else{
-        index_column = 0;
-        out_descr += element + " ";
-      }
-    });
-    
-    out += out_descr +newline;
-    out += '--#DROP# DROP TABLE ' + this.aliasRef.nativeElement.value.trim() + newline;
-    let queryChunks:string[]  = this.el.nativeElement.textContent.split("\n");
-    for (let entry of queryChunks) {
-      entry = entry.trim();
-      if(entry !== undefined){
-        if (entry.match('FROM')){
-          out += '\t\t INTO '+ this.aliasRef.nativeElement.value + newline;
-        }
-        out += entry + newline;
-      }
-
-    }
-    return out;
-  }
 
   getNearText(event:Event):void{
     // alert(JSON.stringify(event));
@@ -269,19 +234,4 @@ console.log("repositioning");
     saveAs(blob, "filename.txt",true);
   }
 
-  public onFileChange(event):void {
-    var file = event.target.files[0];
-    let reader = new FileReader();
-
-    if(event.target.files && event.target.files.length > 0) {
-      console.log(file);
-      reader.onloadend= () => {
-        
-        console.log( reader.result);
-        
-      };
-      reader.readAsText(file);
-
-    }
-  }
 }

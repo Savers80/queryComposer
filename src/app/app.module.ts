@@ -5,12 +5,11 @@ import { MatTabsModule, MatToolbarModule, MatTooltipModule,MatInputModule,MatFor
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http'
 
-import { AppComponent } from './app.component';
 import { HelloComponent } from './hello.component';
 import { QueryComposerComponent } from './query-composer/query-composer.component';
 import { QueryChunkComponent } from './query-chunk/query-chunk.component';
-import {Chunk} from './model/chunk'
-import { from } from 'rxjs';
+import { QcFileComponent } from './qc-file/qc-file.component';
+import { QcWorkspaceComponent } from './qc-workspace/qc-workspace.component';
 
 @NgModule({
   imports:      [ 
@@ -33,9 +32,8 @@ import { from } from 'rxjs';
       MatHeaderRow
     ],
     providers:[
-      
     ],
-  declarations: [ AppComponent, HelloComponent, QueryComposerComponent, QueryChunkComponent ],
-  bootstrap:    [ QueryComposerComponent ]
+  declarations: [ HelloComponent, QueryComposerComponent, QueryChunkComponent, QcFileComponent, QcWorkspaceComponent ],
+  bootstrap:    [  QcWorkspaceComponent ]
 })
 export class AppModule { }

@@ -1,16 +1,16 @@
 import { Component,ViewChild, ElementRef , Input } from '@angular/core';
 import {  OnChanges,OnInit, SimpleChanges} from '@angular/core';
-import { Chunk} from './model/chunk';
+import { Chunk} from '../model/chunk';
 
 @Component({
-  selector: 'my-app',
-  templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ]
+  selector: 'qc-file',
+  templateUrl: './qc-file.component.html',
+  styleUrls: [ './qc-file.component.scss' ]
 })
-export class AppComponent  implements OnInit , OnChanges {
+export class QcFileComponent  implements OnInit , OnChanges {
   name = 'Angular 6';
 
-  chunks_list:Chunk[] ;
+  public chunks_list:Chunk[] ;
 
   ngOnInit() {
     this.chunks_list = [];
@@ -27,7 +27,9 @@ export class AppComponent  implements OnInit , OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     //alert("ciao");
   }
-
+getChunkList():Chunk[]{
+  return this.chunks_list ;
+}
   addChunk(){
     let chunk:Chunk = new Chunk();
     let index:number = this.chunks_list.length;
