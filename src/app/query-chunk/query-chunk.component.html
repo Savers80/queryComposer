@@ -1,5 +1,5 @@
           <div >
-              <form >
+              <form fxLayout="column">
                   <mat-form-field fxFlex>
                     <input matInput #alias placeholder="Table" name="alias" [(ngModel)]="chunk.alias"  [readonly]="alias_readonly" />
                   </mat-form-field>
@@ -10,9 +10,11 @@
                   <!-- <br>
                   {{chunk.alias}} -->
                   <br>
-                  <mat-form-field>
-                    <input matInput #descrizione placeholder="Descrizione" name="descrizione" [(ngModel)]="chunk.descrizione" [readonly]="descrizione_readonly" />
-                  </mat-form-field>
+
+                    <textarea  matInput #descrizione  placeholder="Descrizione" name="descrizione" 
+                            [(ngModel)]="chunk.descrizione" [readonly]="descrizione_readonly" >
+                      </textarea>
+
                   <button (click)="descrizione_readonly=!descrizione_readonly;">
                     <mat-icon>edit</mat-icon>
                   </button>
@@ -33,7 +35,7 @@
               </form>
               <mat-toolbar>
                   <mat-toolbar-row>
-                    <button>
+                    <button (click)="saveFile();"> 
                       <mat-icon>extension</mat-icon>
                     </button>
                     <button (click)="executeQuery();">
@@ -45,6 +47,7 @@
                        </button>
                   </mat-toolbar-row>
                 </mat-toolbar>
+                <input type="file" (change)="onFileChange($event);">
             </div>
 
             <table mat-table [dataSource]="datasource" matSort  class="mat-elevation-z8">

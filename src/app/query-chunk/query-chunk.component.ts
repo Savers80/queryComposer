@@ -2,10 +2,9 @@ import { ViewChild, ElementRef, ViewRef, ViewContainerRef  } from '@angular/core
 import { Component, OnInit, Input } from '@angular/core';
 import {  OnChanges, SimpleChanges} from '@angular/core';
 import hljs from "highlight.js";
-
+import { saveAs } from 'file-saver';
 
 import { Chunk } from '../model/chunk';
-import { v } from '@angular/core/src/render3';
 import { RestApiService } from '../shared/rest-api.service';
 import { MatSort, MatTableDataSource } from '@angular/material';
 @Component({
@@ -53,7 +52,7 @@ createChunk(){
     let out_descr:string="";
     descr_chunks.forEach(element => {
       if (index_column ==0){
-        out_descr +=  newline+ '<b>--#DSCR#</b> ';
+        out_descr +=  newline+ '--#DSCR# ';
         index_column += '--#DSCR# '.length;
       }else if (index_column< max_column){
         out_descr += element + " ";
@@ -263,4 +262,26 @@ console.log("repositioning");
     return filterFunction;
   }
 
+  public saveFile():void{
+    
+    //let a = new FilePr
+    let blob = new Blob([this.createChunk()], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "filename.txt",true);
+  }
+
+  public onFileChange(event):void {
+    var file = event.target.files[0];
+    let reader = new FileReader();
+
+    if(event.target.files && event.target.files.length > 0) {
+      console.log(file);
+      reader.onloadend= () => {
+        
+        console.log( reader.result);
+        
+      };
+      reader.readAsText(file);
+
+    }
+  }
 }
