@@ -23,6 +23,7 @@ export class QueryChunkComponent implements OnInit, OnChanges {
   alias_readonly:boolean = true;
   @ViewChild('chunkRaw') chunkRawRef: ElementRef;
   displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
+  public executeQuery_msg:string;
 
   columnsToDisplay: string[] = this.displayedColumns.slice();
   data  = QueryChunkComponent.ELEMENT_DATA;
@@ -176,16 +177,19 @@ console.log("repositioning");
       this.restApi.executeQuery(this.el.nativeElement.textContent).subscribe((data: []) => {
         this.columnsToDisplay = data['columns_name'];
         this.displayedColumns = data['columns_name']; 
+        this.executeQuery_msg = data['msg']; 
+
         this.data=[];
-        data['rows'].forEach(element => {
-          this.data.push(
-            this.columnsToDisplay.reduce(function(acc, cur, i) {
-              acc[ cur ] = element[i];
-              return acc;
-            }, {}) 
-          )
-        });
-  
+        if (data['rows']){
+          data['rows'].forEach(element => {
+            this.data.push(
+              this.columnsToDisplay.reduce(function(acc, cur, i) {
+                acc[ cur ] = element[i];
+                return acc;
+              }, {}) 
+            )
+          });
+        }
         console.log(this.data);
       })
 
@@ -228,10 +232,9 @@ console.log("repositioning");
   }
 
   public saveFile():void{
-    
-    //let a = new FilePr
-    let blob = new Blob([this.createChunk()], {type: "text/plain;charset=utf-8"});
+    let blob = new Blob([""], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "filename.txt",true);
   }
+
 
 }

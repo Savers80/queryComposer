@@ -21,12 +21,11 @@
                   <br>
 
                   <pre style="white-space: pre-wrap;" class="sql" (keydown)="keyHandler($event);" >
-                      <code class="sql" #el contenteditable="true"  style="display: inline-block; width: 100%">SELECT * FROM asfjkshjkf</code>
+                      <code class="sql" #el contenteditable="true"  style="display: inline-block; width: 100%">{{chunk.query}}</code>
                   </pre>
 
                   <div id="mytxt" #el  contenteditable="true" (click)='getNearText($event);'  style="white-space: pre-wrap;"  class="sql">
                       {{chunk.query}}
-                      SELECT *FROM TableRef 
                   </div>
                   
 
@@ -60,3 +59,6 @@
               <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
               <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
             </table>
+            <div>
+              {{executeQuery_msg}}
+            </div>

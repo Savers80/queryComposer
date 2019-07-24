@@ -1,7 +1,6 @@
 <mat-tab-group>
-    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
-        Contents for {{tab}} tab
-        <app-query-composer></app-query-composer>
+    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab.filename">
+        <app-query-composer [chunks_list]="tab.chunks_list"></app-query-composer>
     </mat-tab>
   <mat-tab disabled>
       <input type="file" #fileInput style="display: none" (change)="onFileChange($event)"/>

@@ -2,7 +2,7 @@
 
  <mat-tab-group>
     <mat-tab label="Chunck">
-      <qc-file #file>loading</qc-file>
+      <qc-file [chunks_list]="chunks_list" #file>loading</qc-file>
     </mat-tab>
     <mat-tab label="Result">
       <div *ngFor="let item of file.getChunkList()" style="white-space: pre-wrap;">
