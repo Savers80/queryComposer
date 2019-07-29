@@ -1,8 +1,9 @@
 import { ViewChild, ElementRef, ViewRef, ViewContainerRef  } from '@angular/core';
 import { Component, OnInit, Input } from '@angular/core';
 import {  OnChanges, SimpleChanges} from '@angular/core';
-import hljs from 'highlight.js';
+//import hljs from 'highlight.js';
 import { saveAs } from 'file-saver';
+import 'codemirror/lib/codemirror.js';
 
 import { Chunk } from '../model/chunk';
 import { RestApiService } from '../shared/rest-api.service';
@@ -34,7 +35,8 @@ export class QueryChunkComponent implements OnInit, OnChanges {
 
   ngOnInit() {
    // alert(JSON.stringify(this.chunk));
-   hljs.initHighlightingOnLoad();
+  // hljs.initHighlightingOnLoad();
+    //CodeMirror.
     this.datasource.sort = this.sort;
     this.datasource.data = QueryChunkComponent.ELEMENT_DATA;
     this.datasource.filterPredicate = this.createFilter();
@@ -124,7 +126,7 @@ export class QueryChunkComponent implements OnInit, OnChanges {
         }
         else{
         // element. (element.children());
-         element.innerHTML =  hljs.highlightAuto( element.textContent).value;
+       //  element.innerHTML =  hljs.highlightAuto( element.textContent).value;
         }
         console.log(e);
         console.log(element);

@@ -14,8 +14,9 @@ export class ChunkParserService {
   constructor() { }
 
   toParseFileToChunk(chunkString:string):Chunk[]{
-    let outList:Chunk[]= [];
-    let chunkStringList:string[] = chunkString.split(ChunkParserService.QC_CHUNK);
+    let outList: Chunk[]= [];
+    let chunkStringList: string[] = chunkString.split(ChunkParserService.QC_CHUNK);
+    console.log("chunkStringList:" + JSON.stringify(chunkStringList) );
 
     chunkStringList.forEach( (value) =>{
         let chunk:Chunk = this.toParseToChunk(value);
@@ -33,12 +34,14 @@ export class ChunkParserService {
 
   toParseToChunk(chunkString:string):Chunk{
 
-    let rows:string[] = chunkString.split("\n") ;
+    let rows:string[] = chunkString.split('\n') ;
+    console.log(rows);
 
     let chunk:Chunk = new Chunk();
     chunk.descrizione = '';
     chunk.query = '';
     rows.forEach( (row)=>{
+      row = row.trim();
       switch(true) { 
         case (row.startsWith(ChunkParserService.QC_ALIAS)) : {  
           chunk.alias =  row.replace(ChunkParserService.QC_ALIAS,'');
@@ -53,7 +56,7 @@ export class ChunkParserService {
             break; 
             }
         default:{
-            chunk.query += row;
+            chunk.query += row + '\n'; 
             break;
           }
         }
