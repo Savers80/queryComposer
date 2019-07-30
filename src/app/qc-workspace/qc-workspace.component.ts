@@ -17,11 +17,7 @@ export class QcWorkspaceComponent implements OnInit, AfterViewInit {
   --#QC_DSCR# should consult the Known Issues and the Resources sections.
   --#QC_DROP# DROP TABLE tableRef1
       
-  SELECT item -- single comment  
-  FROM Orders -- another single comment
-  WHERE id 
-  ALL = (SELECT ID FROM Orders
-  WHERE quantity > 25)
+  SELECT * FROM dicvalues_raw
   
   
   --#QC_CHUNK

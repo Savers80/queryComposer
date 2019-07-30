@@ -1,9 +1,9 @@
-import { ViewChild, ElementRef, ViewRef, ViewContainerRef  } from '@angular/core';
+import { ViewChild, ElementRef, ViewRef, ViewContainerRef, Output, AfterViewInit, EventEmitter  } from '@angular/core';
 import { Component, OnInit, Input } from '@angular/core';
 import {  OnChanges, SimpleChanges} from '@angular/core';
-//import hljs from 'highlight.js';
+
 import { saveAs } from 'file-saver';
-import 'codemirror/lib/codemirror.js';
+import * as CodeMirror from 'codemirror';
 
 import { Chunk } from '../model/chunk';
 import { RestApiService } from '../shared/rest-api.service';
@@ -11,20 +11,24 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 @Component({
   selector: 'app-query-chunk',
   templateUrl: './query-chunk.component.html',
-  styleUrls: ['./query-chunk.component.css']
+  styleUrls: ['./query-chunk.component.scss']
 })
-export class QueryChunkComponent implements OnInit, OnChanges {
+export class QueryChunkComponent implements AfterViewInit, OnInit, OnChanges {
 
 
   @Input() chunk: Chunk;
-  @ViewChild('el') el: ElementRef;
   @ViewChild('descrizione') descrizioneRef: ElementRef;
   descrizione_readonly:boolean = true;
   @ViewChild('alias') aliasRef: ElementRef;
   alias_readonly:boolean = true;
+
   @ViewChild('chunkRaw') chunkRawRef: ElementRef;
   displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
   public executeQuery_msg:string;
+
+  @ViewChild('host') host: ElementRef;
+  @Output() instance = null;
+  _value = '';
 
   columnsToDisplay: string[] = this.displayedColumns.slice();
   data  = QueryChunkComponent.ELEMENT_DATA;
@@ -32,11 +36,81 @@ export class QueryChunkComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(public restApi: RestApiService ) { }
+  ngAfterViewInit(){
+      let mime = 'text/x-plsql';
+      this.instance = CodeMirror.fromTextArea(this.host.nativeElement, {
+            mode: mime,
+            indentWithTabs: true,
+            smartIndent: true,
+            lineNumbers: true,
+            matchBrackets : true,
+            autofocus: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            hintOptions: {tables: {
+              users: ["name", "score", "birthDate"],
+              countries: ["name", "population", "size"]
+            }}
+          });
+      this.instance.refresh();
+                    /*
+      this.instance.setValue(this.chunk.query);
+      this.instance.on('change', () => {
+        this.updateValue(this.instance.getValue());
+      });
+      this.instance.on('focus', (instance, event) => {
+        this.focus.emit({instance, event});
+      });
+    
+      this.instance.on('cursorActivity', (instance) => {
+        this.cursorActivity.emit({instance});
+      });
+    
+      this.instance.on('blur', (instance, event) => {
+        this.blur.emit({instance, event});
+      });
+      */
+}
+
+    @Output() change = new EventEmitter();
+  @Output() focus = new EventEmitter();
+  @Output() blur = new EventEmitter();
+  @Output() cursorActivity = new EventEmitter();
+  get value() { return this._value; }
+  @Input() set value(v) {
+    if (v !== this._value) {
+      this._value = v;
+      this.onChange(v);
+    }
+  }
+  
+
+/**
+ * Value update process
+ */
+updateValue(value) {
+  this.value = value;
+  this.onTouched();
+  this.change.emit(value);
+}
+
+/**
+ * Implements ControlValueAccessor
+ */
+writeValue(value) {
+  this._value = value || '';
+  if (this.instance) {
+    this.instance.setValue(this._value);
+  }
+}
+
+    onChange(_) {}
+    onTouched() {}
+    registerOnChange(fn) { this.onChange = fn; }
+    registerOnTouched(fn) { this.onTouched = fn; }
 
   ngOnInit() {
    // alert(JSON.stringify(this.chunk));
   // hljs.initHighlightingOnLoad();
-    //CodeMirror.
     this.datasource.sort = this.sort;
     this.datasource.data = QueryChunkComponent.ELEMENT_DATA;
     this.datasource.filterPredicate = this.createFilter();
@@ -45,117 +119,6 @@ export class QueryChunkComponent implements OnInit, OnChanges {
    ngOnChanges(changes: SimpleChanges) {
     // alert("ciao");
    }
-
-
-  getNearText(event:Event):void{
-    // alert(JSON.stringify(event));
-    
-    let element:Element = this.el.nativeElement;  
-    
-   // element.innerHTML =  hljs.highlightAuto(element.textContent).value ;
-    console.log ("getNearText");
-    return;
-  }
-  getPosition(event:HTMLElement){
-    let element:Element = event; 
-    console.log(window.getSelection().getRangeAt(0));
-    let range = window.getSelection().getRangeAt(0);
-    console.log(range);
-    let preCaretRange = range.cloneRange();
-    preCaretRange.selectNodeContents(element);
-    preCaretRange.setEnd(range.endContainer, range.endOffset);
-    console.log(preCaretRange);
-    let caretOffset = preCaretRange.toString().length
-    let textContent:String = element.textContent;
-    console.log('textContent:' +textContent);
-    let endIndex:number = textContent.indexOf(" ", caretOffset );
-    console.log('end:' +endIndex);
-    console.log(textContent.substr(0,caretOffset));
-    let index_start:number = new String(textContent.substr(0,caretOffset)).lastIndexOf(" ");
-    index_start = index_start ===-1? 0:index_start;
-    console.log('index_start:' + index_start);
-    console.log( textContent.substr(index_start,endIndex-index_start)  );
-    
-         /*
-    let textContent_orig:String = element.textContent;
-    let str_list:string[] = textContent_orig.split(" ");
-    let statement:string[] = ['select', 'from', 'as', 'where', 'order','by', 'over','partition'];
-    let html_out:string =  "";
-
-    let a:RegExp = new RegExp('(from)|(select)');
-
-    str_list.forEach(element => {
-      if ( statement.includes(element.toLocaleLowerCase(),0) ){
-        html_out += "<b style='color:blue'>" + element.toLocaleUpperCase() + "</b>";
-      }else {
-        html_out += element;
-      }
-      html_out += " ";
-    });
-    element.innerHTML = textContent_orig.replace(a,"<b style='color:blue'>$1</b>");
-    */
-  }
-
-
-   keyHandler(e:KeyboardEvent) {
-    var tabkey = 9;
-    let element:HTMLInputElement = <HTMLInputElement> e.target;
-
-    let range = window.getSelection().getRangeAt(0);
-    console.log(range);
-    let index = 0;
-    let char_position = range.endOffset;
-    let container = range.endContainer.parentNode.nodeName=='SPAN'? range.endContainer.parentNode.previousSibling: range.endContainer.previousSibling;
-    while(container != null && index <20 ){
-      console.log("char_position: " +char_position);
-      index++;
-      char_position += container.textContent.length;
-      container = container.previousSibling;
-    }
-    console.log("char_position: " +char_position);
-
-
-    if (e.ctrlKey == true) {
-      if (e.keyCode == 32) {
-      }
-    }else {
-      if (e.keyCode == tabkey) {
-          e.preventDefault();
-          element.innerHTML += "&nbsp;&nbsp;&nbsp;&nbsp;";
-          return false;
-        }
-        else{
-        // element. (element.children());
-       //  element.innerHTML =  hljs.highlightAuto( element.textContent).value;
-        }
-        console.log(e);
-        console.log(element);
-    }
-console.log("repositioning");
-
-    let current_el:Node = element.firstChild;
-    do{
-      console.log(current_el);
-      if (current_el){
-        if ( current_el.textContent.length < char_position ){
-          char_position -= current_el.textContent.length;
-          }
-
-              current_el = current_el.nextSibling==null? current_el : current_el.nextSibling ;
-             
-        
-      } 
-    }while( current_el!=null && current_el.textContent.length < char_position);
-    current_el = current_el.nodeName=='SPAN' ? current_el.firstChild : current_el;
-      if (current_el==null){
-        char_position=0;  
-      }
-    
-    console.log("current_el:");
-    console.log(current_el);
-    console.log(char_position);
-    window.getSelection().setPosition(current_el, char_position);
-  }
 
   listAllColumnsQuery(dataEmployee) {
     this.restApi.listAllColumnsQuery().subscribe((data: []) => {
@@ -176,7 +139,8 @@ console.log("repositioning");
     }
 
     executeQuery(dataEmployee) {
-      this.restApi.executeQuery(this.el.nativeElement.textContent).subscribe((data: []) => {
+      console.log('execute:' +this.instance.getValue());
+      this.restApi.executeQuery(this.instance.getValue( )).subscribe((data: []) => {
         this.columnsToDisplay = data['columns_name'];
         this.displayedColumns = data['columns_name']; 
         this.executeQuery_msg = data['msg']; 
@@ -193,9 +157,9 @@ console.log("repositioning");
           });
         }
         console.log(this.data);
-      })
+        this.datasource.data = this.data;
+      });
 
-      this.datasource.data = this.data;
       }
 
       applyFilter(filterValue: string) {
