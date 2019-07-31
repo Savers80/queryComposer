@@ -4,7 +4,7 @@ import { ChunkParserService } from '../shared/chunk-parser.service';
 @Component({
   selector: 'qc-workspace',
   templateUrl: './qc-workspace.component.html',
-  styleUrls: ['./qc-workspace.component.css']
+  styleUrls: ['./qc-workspace.component.scss']
 })
 export class QcWorkspaceComponent implements OnInit, AfterViewInit {
 

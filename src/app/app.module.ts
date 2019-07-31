@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { MatTabsModule, MatToolbarModule, MatTooltipModule,MatInputModule,MatFormFieldModule,MatIconModule,MatSidenavModule, MatListModule, MatTableModule, MatHeaderRow, MatSortModule } from '@angular/material';
+import {MatTabsModule, MatToolbarModule, MatTooltipModule,MatInputModule,MatFormFieldModule,MatIconModule,MatSidenavModule, MatListModule, MatTableModule, MatHeaderRow, MatSortModule, MatTabBody, MatTabContent, MatTabBodyPortal } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http'
 
@@ -10,7 +10,7 @@ import { QueryComposerComponent } from './query-composer/query-composer.componen
 import { QueryChunkComponent } from './query-chunk/query-chunk.component';
 import { QcFileComponent } from './qc-file/qc-file.component';
 import { QcWorkspaceComponent } from './qc-workspace/qc-workspace.component';
-
+import { FlexLayoutModule} from '@angular/flex-layout';
 @NgModule({
   imports:      [ 
     BrowserModule, 
@@ -26,7 +26,8 @@ import { QcWorkspaceComponent } from './qc-workspace/qc-workspace.component';
     MatListModule,
     MatTableModule,
     MatSortModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
     ],
     exports:      [ 
       MatHeaderRow

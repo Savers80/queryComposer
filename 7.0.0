@@ -1,0 +1,5 @@
++ @angular/cdk@7.2.2
++ @angular/flex-layout@8.0.0-beta.26
+updated 2 packages and audited 41814 packages in 30.682s
+found 1 low severity vulnerability
+  run `npm audit fix` to fix them, or `npm audit` for details

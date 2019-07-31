@@ -1,4 +1,4 @@
-<mat-tab-group fxLayout="column" fxFlex style="overflow: hidden; height: 100%;">
+<mat-tab-group fxLayout="column" fxFlex style="overflow: hidden" >
     <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab.filename" fxFlex fxLayout="column">
         <app-query-composer [chunks_list]="tab.chunks_list" fxFlex></app-query-composer>
     </mat-tab>
